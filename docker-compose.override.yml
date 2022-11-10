@@ -1,8 +1,17 @@
 version: '3.4'
 
 services:
+  db:
+    environment:
+      - POSTGRES_PASSWORD=passw0rd!
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
   urlshortner:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "80"
+      - 8080:80
+
+volumes:
+  pgdata:

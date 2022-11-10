@@ -6,9 +6,7 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["src/UrlShortner/UrlShortner.csproj", "UrlShortner/"]
-RUN dotnet restore "UrlShortner/UrlShortner.csproj"
-COPY . .
+COPY ["src", "."]
 WORKDIR "/src/UrlShortner"
 RUN dotnet build "UrlShortner.csproj" -c Release -o /app/build
 

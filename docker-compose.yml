@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  urlshortner:
+    image: ${DOCKER_REGISTRY-}urlshortner
+    build:
+      context: .
+      dockerfile: src/UrlShortner/Dockerfile

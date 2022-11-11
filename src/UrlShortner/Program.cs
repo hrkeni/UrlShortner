@@ -1,6 +1,5 @@
 using UrlShortner.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,16 +20,15 @@ builder.Services.AddDbContext<UrlShortnerContext>(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<UrlShortnerContext>();
-    db.Database.Migrate();
-}
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/error");
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<UrlShortnerContext>();
+        db.Database.Migrate();
+    }
 }
 
 if (app.Environment.IsDevelopment())
@@ -48,3 +46,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

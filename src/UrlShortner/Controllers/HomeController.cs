@@ -28,7 +28,7 @@ public class HomeController : Controller
     }
 
     [HttpPost("shorten")]
-    public async Task<ActionResult<ShortenUrlResponse>> Shorten(ShortenUrlRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<ShortenUrlResponse>> Shorten([FromBody] ShortenUrlRequest request, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid) {
             return BadRequest(ModelState);

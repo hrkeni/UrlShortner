@@ -1,5 +1,5 @@
 using FluentAssertions;
-using UrlShortner.Core.Models;
+using UrlShortner.Models;
 
 namespace UrlShortner.Tests.UnitTests;
 

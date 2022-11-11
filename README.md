@@ -6,6 +6,9 @@ A simple URL shortner service written in .NET
 - Run `docker compose up` in the root directory
 - The application will be available at `localhost:8080`
 
+## Running tests
+`docker compose -f docker-compose.tests.yml up`
+
 ## Architectural discussions
 Architecture discussions can be found in `docs/adr`. These docs follow a very basic Architectural Decision Record format, essentially aiming
 to record consequential decisions about the architecture of the application within the codebase itself and committed to source control.

@@ -39,8 +39,7 @@ public class ShortenedUrlTests
     [InlineData("www.google.com")]
     [InlineData("")]
     [InlineData("   ")]
-    [InlineData("/some/relative/url")]
-    public void ItShouldThrowAnExceptionWhenUrlIsInalid(string url)
+    public void ItShouldThrowAnExceptionWhenUrlIsInvalid(string url)
     {
         var random = new Random();
         var id = random.Next(int.MinValue, int.MaxValue);

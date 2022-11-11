@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=passw0rd!
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  urlshortner-tests:
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CUSTOMCONNSTR_URLSHORTNER=Host=db;Port=5432;Database=url_shortner_test;Username=postgres;Password=passw0rd!
+    volumes:
+      - ./src:/src
+    command: >
+      bash -c "dotnet restore src/UrlShortner.Tests/UrlShortner.Tests.csproj
+      && dotnet test src/UrlShortner.Tests/UrlShortner.Tests.csproj"
+volumes:
+  pgdata:

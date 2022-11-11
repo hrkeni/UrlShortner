@@ -4,6 +4,8 @@ services:
   db:
     image: postgres:latest
     restart: always
+    ports:
+      - 5432:5432
 
   urlshortner:
     image: ${DOCKER_REGISTRY-}urlshortner

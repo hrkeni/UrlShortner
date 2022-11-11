@@ -10,6 +10,7 @@ services:
   urlshortner:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - CUSTOMCONNSTR_URLSHORTNER=Host=db;Database=url_shortner;Username=postgres;Password=passw0rd!
     ports:
       - 8080:80
 

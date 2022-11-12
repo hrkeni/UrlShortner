@@ -38,7 +38,7 @@ public class HomeController : Controller
             return BadRequest(ModelState);
         }
 
-        var shortenedUrl = new ShortenedUrl(_random.Next(), request.LongUrl);
+        var shortenedUrl = new ShortenedUrl(_random.Next(int.MinValue, int.MaxValue), request.LongUrl);
 
         await _context.ShortenedUrls.AddAsync(shortenedUrl, cancellationToken);
         

@@ -63,6 +63,52 @@ public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>, I
         results.Count.Should().Be(0);
     }
 
+    [Fact]
+    public async Task Redirect_WithValidSlug_Should302Redirect()
+    {
+        var client = _factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false});
+
+        var response = await client.PostAsJsonAsync("/shorten", new ShortenUrlRequest("http://this.is.a.test.url/"));
+
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var slug = (await response.Content.ReadFromJsonAsync<ShortenUrlResponse>())?.Slug;
+
+        response = await client.GetAsync("/" + slug);
+
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Redirect);
+    }
+
+    [Fact]
+    public async Task Redirect_WithInvalidSlug_Should404NotFound()
+    {
+        var client = _factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+
+        var response = await client.GetAsync("/invalid-slug");
+
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task Redirect_WithValidSlug_ShouldIncrementVisitCount()
+    {
+        var client = _factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+
+        var response = await client.PostAsJsonAsync("/shorten", new ShortenUrlRequest("http://testing.visit.counts/"));
+
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var slug = (await response.Content.ReadFromJsonAsync<ShortenUrlResponse>())?.Slug;
+
+        response = await client.GetAsync("/" + slug);
+
+        var results = await _context.ShortenedUrls.Where(s => s.LongUrl == "http://testing.visit.counts/").ToListAsync();
+
+        results.Count.Should().Be(1);
+
+        results[0].VisitCount.Should().Be(1);
+    }
+
     public void Dispose()
     {
         _scope.Dispose();

@@ -2,7 +2,48 @@
     ViewData["Title"] = "Home Page";
 }
 
+@section scripts {
+    <script>
+        function submitForm() {
+            const urlInput = document.getElementById('urlInput').value;
+            const messageElem = document.getElementById('message');
+
+            fetch('/shorten', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({longUrl: urlInput})
+            }).then((response) => {
+                if (response.ok) {
+                    response.json().then((data) => { message.textContent = `Shortened URL = ${location.origin}/${data.slug}` });
+                } else {
+                    response.json().then((data) => { message.textContent = data.LongUrl[0] });
+                }
+            }).catch((reason) => {
+                console.log(reason);
+            })
+        }
+
+        document
+            .getElementById('submitBtn')
+            .addEventListener('click', () => {
+                submitForm();
+            });
+
+    </script>
+}
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">URL Shortner</h1>
+    <p>Enter a long URL to be shortened below.</p>
+    <form>
+        <div class="form-group">
+            <input type="url" class="form-control" id="urlInput" />
+        </div>
+        <br />
+        <button type="button" class="btn btn-primary" id="submitBtn">Shorten</button>
+        <br />
+        <p id="message"></p>
+    </form>
 </div>

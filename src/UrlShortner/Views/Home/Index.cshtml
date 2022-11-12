@@ -25,24 +25,23 @@
             })
         }
 
-        document
-            .getElementById('submitBtn')
-            .addEventListener('click', () => {
-                submitForm();
-            });
-
+        const form = document.getElementById('urlForm');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            submitForm();
+        });
     </script>
 }
 
 <div class="text-center">
     <h1 class="display-4">URL Shortner</h1>
     <p>Enter a long URL to be shortened below.</p>
-    <form>
+    <form id="urlForm">
         <div class="form-group">
             <input type="url" class="form-control" id="urlInput" />
         </div>
         <br />
-        <button type="button" class="btn btn-primary" id="submitBtn">Shorten</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Shorten</button>
         <br />
         <p id="message"></p>
     </form>

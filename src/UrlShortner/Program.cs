@@ -18,6 +18,13 @@ builder.Services.AddDbContext<UrlShortnerContext>(options =>
         .UseSnakeCaseNamingConvention();
 });
 
+builder.Services.AddHostedService<BackgroundQueueService>();
+
+builder.Services.AddSingleton(ctx =>
+{
+    return new VisitQueue(100);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

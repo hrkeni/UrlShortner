@@ -50,7 +50,7 @@ public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>, I
     }
 
     [Fact]
-    public async Task Shorten_WithInvalidLongUrl_ShouldReturnBadReqiest()
+    public async Task Shorten_WithInvalidLongUrl_ShouldReturnBadRequest()
     {
         var client = _factory.CreateClient();
 

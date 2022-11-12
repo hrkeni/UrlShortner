@@ -11,13 +11,15 @@ public class HomeController : Controller
     private static readonly Random _random = new();
 
     private readonly UrlShortnerContext _context;
+    private readonly VisitQueue _visitQueue;
     private readonly ILogger<HomeController> _logger;
 
     
 
-    public HomeController(UrlShortnerContext context, ILogger<HomeController> logger)
+    public HomeController(UrlShortnerContext context, VisitQueue visitQueue, ILogger<HomeController> logger)
     {
         _context = context;
+        _visitQueue = visitQueue;
         _logger = logger;
     }
 
@@ -60,6 +62,10 @@ public class HomeController : Controller
             return NotFound();
         }
 
+        var visit = new ShortenedUrlVisit(shortenedUrl.Id, HttpContext.Request.Headers["User-Agent"].ToString(), HttpContext.Connection.RemoteIpAddress?.ToString());
+
+        await _visitQueue.Enqueue(visit);
+        
         return Redirect(shortenedUrl.LongUrl);
     }
 

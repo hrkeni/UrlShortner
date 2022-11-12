@@ -11,6 +11,8 @@ public record ShortenedUrl
 
     public string Slug { get; private set; }
 
+    public int VisitCount { get; private set; }
+
     public ShortenedUrl(int id, string longUrl)
     {
         Id = id;
@@ -24,5 +26,12 @@ public record ShortenedUrl
 
         var bytes = BitConverter.GetBytes(id);
         Slug = bytes.ToBase62();
+
+        VisitCount = 0;
+    }
+
+    public void RecordVisit()
+    {
+        VisitCount++;
     }
 }

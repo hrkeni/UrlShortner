@@ -47,4 +47,29 @@ public class ShortenedUrlTests
         var action = () => new ShortenedUrl(id, url);
         action.Should().Throw<ArgumentException>();
     }
+
+    [Fact]
+    public void ItShouldStartWithZeroVists()
+    {
+        var random = new Random();
+        var id = random.Next(int.MinValue, int.MaxValue);
+        var url = "https://www.google.com";
+
+        var shortenedUrl = new ShortenedUrl(id, url);
+
+        shortenedUrl.VisitCount.Should().Be(0);
+    }
+
+    [Fact]
+    public void ItShouldIncrementVistsByOneWhenVisited()
+    {
+        var random = new Random();
+        var id = random.Next(int.MinValue, int.MaxValue);
+        var url = "https://www.google.com";
+
+        var shortenedUrl = new ShortenedUrl(id, url);
+        
+        shortenedUrl.RecordVisit();
+        shortenedUrl.VisitCount.Should().Be(1);
+    }
 }

@@ -52,6 +52,14 @@ public class HomeController : Controller
         return Ok(new ShortenUrlResponse(shortenedUrl.Slug));
     }
 
+    [HttpGet("stats")]
+    public async Task<ActionResult<ShortenedUrl>> Stats(CancellationToken cancellationToken)
+    {
+        var shortenedUrls = await _context.ShortenedUrls.ToListAsync(cancellationToken);
+
+        return View(shortenedUrls);
+    }
+
     [HttpGet("{slug}")]
     public async Task<ActionResult> Redirect(string slug, CancellationToken cancellationToken)
     {
@@ -68,6 +76,7 @@ public class HomeController : Controller
         
         return Redirect(shortenedUrl.LongUrl);
     }
+    
 
     [HttpGet("error")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

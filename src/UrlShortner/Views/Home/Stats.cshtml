@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ShortenedUrl>
+@{
+    ViewData["Title"] = "Stats";
+}
+
+@section scripts {
+    <script>
+    </script>
+}
+
+<div class="text-center">
+    <h1 class="display-4">Stats</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Long URL</th>
+                <th>Slug</th>
+                <th>Visit Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.LongUrl</td>
+                    <td>@item.Slug</td>
+                    <td>@item.VisitCount</td>
+                </tr>
+            }
+        </tbody>
+        </tbody>
+    </table>
+</div>

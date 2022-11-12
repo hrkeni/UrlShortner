@@ -129,7 +129,7 @@ public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>, I
         response = await client.GetAsync("/stats/csv");
 
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        response.Content.Headers!.ContentType.MediaType.Should().Be("text/csv");
+        response.Content.Headers!.ContentType!.MediaType.Should().Be("text/csv");
     }
 
     public void Dispose()

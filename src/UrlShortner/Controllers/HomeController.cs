@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CsvHelper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using UrlShortner.Data;
 using UrlShortner.Dtos;
 using UrlShortner.Models;
@@ -58,6 +60,23 @@ public class HomeController : Controller
         var shortenedUrls = await _context.ShortenedUrls.ToListAsync(cancellationToken);
 
         return View(shortenedUrls);
+    }
+
+    [HttpGet("stats/csv")]
+    public async Task<ActionResult> DownloadCsv(CancellationToken cancellationToken)
+    {
+        var shortenedUrls = await _context.ShortenedUrls.ToListAsync(cancellationToken);
+
+        byte[] results;
+        using var memoryStream = new MemoryStream();
+        using var streamWriter = new StreamWriter(memoryStream);
+        using var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
+        csvWriter.WriteRecords(shortenedUrls);
+        await streamWriter.FlushAsync();
+        results = memoryStream.ToArray();
+
+        return File(results, "text/csv", "stats.csv");
+
     }
 
     [HttpGet("{slug}")]

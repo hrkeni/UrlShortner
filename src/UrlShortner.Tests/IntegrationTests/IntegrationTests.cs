@@ -102,11 +102,34 @@ public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>, I
 
         response = await client.GetAsync("/" + slug);
 
+        await Task.Delay(50); // wait a bit for async db update
+
         var results = await _context.ShortenedUrls.Where(s => s.LongUrl == "http://testing.visit.counts/").ToListAsync();
 
         results.Count.Should().Be(1);
 
         results[0].VisitCount.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task DownloadCsv_ShouldRepondWithCsvFile()
+    {
+        var client = _factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+
+        var response = await client.PostAsJsonAsync("/shorten", new ShortenUrlRequest("http://testing.visit.counts/"));
+
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        var slug = (await response.Content.ReadFromJsonAsync<ShortenUrlResponse>())?.Slug;
+
+        await client.GetAsync("/" + slug);
+        await client.GetAsync("/" + slug);
+        await client.GetAsync("/" + slug);
+
+        response = await client.GetAsync("/stats/csv");
+
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.Content.Headers!.ContentType.MediaType.Should().Be("text/csv");
     }
 
     public void Dispose()
